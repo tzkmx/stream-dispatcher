@@ -60,7 +60,9 @@ function createStore(reducers) {
 
     function register(listener) {
         var stream = listen()
-        stream.map(listener)
+        stream.map(function () {
+            listener()
+        })
         return stream
     }
 
