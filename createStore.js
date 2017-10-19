@@ -50,7 +50,21 @@ function createStore(reducers) {
         return store[key].call({})
     }
 
-    return { dispatch, map, get }
+    function listen() {
+        var streams = []
+        for (var key in store) {
+            if (store.hasOwnProperty(key)) streams.push(store[key])
+        }
+        return Stream.merge(streams)
+    }
+
+    function register(listener) {
+        var stream = listen()
+        stream.map(listener)
+        return stream
+    }
+
+    return { dispatch, map, get, register }
 }
 
 module.exports = createStore

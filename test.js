@@ -20,7 +20,7 @@ o.spec("createStore()", function () {
         })
         var called = 0
 
-        store.map("count").map(function (val) {
+        store.register(function (val) {
             // gets called once immediately
             called++
         })
