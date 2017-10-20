@@ -42,8 +42,8 @@ function createStore(reducers) {
         dispatcher(action)
     }
 
-    function map(key) {
-        return store[key].map(identity)
+    function map(key, apply) {
+        return store[key].map(apply || identity)
     }
 
     function get(key) {
