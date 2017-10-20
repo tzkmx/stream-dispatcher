@@ -1,20 +1,23 @@
 var o = require('ospec')
 var createStore = require('./createStore')
 
-function counter(value = 0, action) {
-    switch (action.type) {
-    case "INCR":
-        return value + 1
-    case "DECR":
-        return value - 1
-    default:
-        return value
-    }
-}
-
 o.spec("createStore()", function () {
 
     o("basic counter", function () {
+        function counter(value = 0, action) {
+            switch (action.type) {
+            case "INCR":
+                return value + 1
+            case "DECR":
+                return value - 1
+            default:
+                return value
+            }
+        }
+        var action = new function () {
+            this.incr = ()=> ({type: "INCR"})
+            this.decr = ()=> ({type: "DECR"})
+        }
         var store = createStore({
             count: counter
         })
@@ -29,13 +32,13 @@ o.spec("createStore()", function () {
         o(store.get("count")).equals(0)
 
         // increment
-        store.dispatch({type: "INCR"})
-        store.dispatch({type: "INCR"})
-        store.dispatch({type: "INCR"})
+        store.dispatch(action.incr())
+        store.dispatch(action.incr())
+        store.dispatch(action.incr())
         o(store.get("count")).equals(3)
 
         // decrement
-        store.dispatch({type: "DECR"})
+        store.dispatch(action.decr())
         o(store.get("count")).equals(2)
 
         // check # calls
